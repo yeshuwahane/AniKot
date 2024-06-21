@@ -1,0 +1,22 @@
+query DashboardAnimeListQuery($page: Int, $perPage: Int, $seasonYear: Int) {
+    pageInfo: Page(page: $page, perPage: $perPage) {
+        media(seasonYear: $seasonYear, type: ANIME, sort: START_DATE_DESC) {
+            id
+            title {
+                romaji
+                english
+                native
+            }
+            coverImage {
+                large
+            }
+            startDate {
+                year
+                month
+                day
+            }
+            description
+            genres
+        }
+    }
+}

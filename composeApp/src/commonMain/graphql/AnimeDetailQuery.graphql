@@ -1,0 +1,20 @@
+query AnimeDetailQuery($mediaId: Int!) {
+    mediaInfo: Media(id: $mediaId) {
+        id
+        title {
+            romaji
+            english
+            native
+        }
+        description
+        coverImage {
+            large
+            extraLarge
+        }
+        episodes
+        season
+        seasonYear
+        status
+        genres
+    }
+}

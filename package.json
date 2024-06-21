@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "@apollo/usage-reporting-protobuf": "^4.1.1",
+    "@apollo/utils.fetcher": "^3.1.0",
+    "@oclif/core": "^4.0.6",
+    "apollo-server": "^3.13.0",
+    "graphql": "^16.8.2",
+    "lru-cache": "^10.2.2",
+    "typescript": "^2.9.2"
+  }
+}
