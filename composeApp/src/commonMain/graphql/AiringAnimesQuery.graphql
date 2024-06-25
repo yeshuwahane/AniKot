@@ -1,0 +1,22 @@
+query AiringAnimesQuery($page: Int, $perPage: Int) {
+    airingPage: Page(page: $page, perPage: $perPage) {
+        media(status: RELEASING, type: ANIME, sort: START_DATE_DESC) {
+            id
+            title {
+                romaji
+                english
+                native
+            }
+            coverImage {
+                large
+            }
+            startDate {
+                year
+                month
+                day
+            }
+            description
+            genres
+        }
+    }
+}

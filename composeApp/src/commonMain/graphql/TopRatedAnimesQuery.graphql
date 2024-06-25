@@ -1,0 +1,23 @@
+query TopRatedAnimesQuery($page: Int, $perPage: Int) {
+    topRatedAnimesPage: Page(page: $page, perPage: $perPage) {
+        media(type: ANIME, sort: SCORE_DESC) {
+            id
+            title {
+                romaji
+                english
+                native
+            }
+            coverImage {
+                large
+            }
+            startDate {
+                year
+                month
+                day
+            }
+            description
+            genres
+            averageScore
+        }
+    }
+}

@@ -1,6 +1,5 @@
-package presentation
+package presentation.animegrids
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,13 +12,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -32,26 +31,44 @@ import cafe.adriel.voyager.koin.getScreenModel
 import io.github.aakira.napier.Napier
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import presentation.home.dashboard.AnimeState
-import presentation.home.dashboard.DashboardViewModel
+import kotlinx.coroutines.launch
+import presentation.AnimeState
 
-
-class MainScreen() : Screen {
-
-
+class AnimeGridScreen(val condition: String):Screen {
     @Composable
     override fun Content() {
 
-        val viewModel = getScreenModel<DashboardViewModel>()
+        val viewModel = getScreenModel<AnimeGridViewModel>()
+        val scope = rememberCoroutineScope()
 
-        val uiState by  viewModel.uiState.collectAsState()
-
-
+        val uiState by viewModel.uiState.collectAsState()
 
         LaunchedEffect(Unit) {
-//            viewModel.getAnime()
-//            viewModel.getAiringAnimes()
-//            viewModel.getTopAnimes()
+            when (condition) {
+                "most watched" -> {
+                scope.launch {
+                    viewModel.getTopAnime()
+                }
+            }
+                "top rated" -> {
+                scope.launch {
+                    viewModel.getTopRatedAnime()
+                }
+            }
+                "top airing anime" -> {
+                scope.launch {
+                    viewModel.getAiringAnime()
+                }
+            }
+                else -> {
+                    scope.launch {
+                        viewModel.getNewAnime()
+                    }
+            }
+            }
+
+
+
             Napier.d("LaunchedEffect")
 
         }
@@ -61,16 +78,16 @@ class MainScreen() : Screen {
                 Text(text = "Series", fontSize = 24.sp, color = Color.White)
                 Spacer(modifier = Modifier.height(16.dp))
 
-                uiState.topAnimesUiState.data?.let { AnimeList(animes = it) }
+                uiState.animeUiState.data?.let { AnimeList(animes = it) }
             }
 
         }
-
-
     }
+
 
     @Composable
     fun AnimeList(animes: List<AnimeState?>) {
+
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
@@ -110,51 +127,18 @@ class MainScreen() : Screen {
                     contentScale = ContentScale.Crop
                 )
             }
-            if (anime.englishTitle.isNullOrEmpty()){
-                anime.title?.let { Text(text = it, fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold) }
-            }else{
-                anime.englishTitle.let { Text(text = it, fontSize = 16.sp, color = Color.White, fontWeight = FontWeight.Bold) }
+            if (anime.englishTitle.isNullOrEmpty()) {
+                anime.title?.let { Text(text = it, fontSize = 16.sp, fontWeight = FontWeight.Bold) }
+            } else {
+                anime.englishTitle.let {
+                    Text(
+                        text = it,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-            anime.startYear.let { it?.let { it1 -> Text(text = it1, fontSize = 12.sp, color = Color.White) } }
+            anime.startYear.let { it?.let { it1 -> Text(text = it1, fontSize = 12.sp) } }
         }
     }
-
-
-    @Composable
-    fun AnimeCard(anime: AnimeState, modifier: Modifier = Modifier, onClick: () -> Unit) {
-        Column(
-            modifier = modifier
-                .padding(8.dp)
-                .clickable { onClick() }
-        ) {
-            anime.coverImage?.let { asyncPainterResource(it) }?.let {
-                KamelImage(
-                    it,
-                    contentDescription = anime.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .height(150.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                )
-            }
-            Text(
-                text = anime.title.toString(),
-                style = MaterialTheme.typography.body1.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                ),
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Text(
-                text = anime.englishTitle.toString(),
-                style = MaterialTheme.typography.body1.copy(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                ),
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-    }
-
-
 }

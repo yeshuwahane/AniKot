@@ -13,8 +13,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import ani.composeapp.generated.resources.Res
 import ani.composeapp.generated.resources.compose_multiplatform
+import cafe.adriel.voyager.navigator.Navigator
 import di.appModule
 import org.koin.compose.KoinApplication
+import presentation.MainScreen
+import presentation.navigation.TabView
 
 @Composable
 @Preview
@@ -26,19 +29,7 @@ fun App() {
         }
     ){
         MaterialTheme {
-            var showContent by remember { mutableStateOf(false) }
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Button(onClick = { showContent = !showContent }) {
-                    Text("Click me!")
-                }
-                AnimatedVisibility(showContent) {
-                    val greeting = remember { Greeting().greet() }
-                    Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Image(painterResource(Res.drawable.compose_multiplatform), null)
-                        Text("Compose: $greeting")
-                    }
-                }
-            }
+            Navigator(TabView())
         }
     }
 }

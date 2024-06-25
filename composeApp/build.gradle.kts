@@ -50,6 +50,7 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines.core)
 
+            //graphQl Apollo
             implementation("com.apollographql.apollo3:apollo-runtime:3.2.0")
 
             //ktor and serialization

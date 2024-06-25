@@ -17,11 +17,11 @@ data class Data(
 @Serializable
 data class Page(
     @SerialName("media")
-    val media: List<Media>
+    val media: List<DashboardMedia>
 )
 
 @Serializable
-data class Media(
+data class DashboardMedia(
     @SerialName("coverImage")
     val coverImage: CoverImage,
     @SerialName("description")
@@ -64,4 +64,5 @@ data class Title(
     @SerialName("romaji")
     val romaji: String
 )
+
 

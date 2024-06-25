@@ -1,14 +1,18 @@
 package domain.repository
 
-import data.dto.AnimeDetailsDto
-import data.dto.AnimeListDto
-import data.utils.DataResource
+import com.yeshuwahane.ani.AiringAnimesQuery
+import com.yeshuwahane.ani.AnimeListQuery
+import com.yeshuwahane.ani.TopAnimesQuery
+import com.yeshuwahane.ani.TopRatedAnimesQuery
+
 
 interface AnimeRepository {
 
-    suspend fun getDashboardAnime():DataResource<List<AnimeListDto>>
 
-    suspend fun getAnimeByID(id:Int):DataResource<AnimeDetailsDto>
+    suspend fun getNewAnime(page: Int, perPage: Int):List<AnimeListQuery.Medium?>
+
+    suspend fun getTopRatedAnimes(page: Int, perPage: Int): List<TopRatedAnimesQuery.Medium?>
 
 
-}
+
+    }

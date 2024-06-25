@@ -1,9 +1,11 @@
 package di
 
+import com.apollographql.apollo3.ApolloClient
 import data.Constant
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -17,6 +19,18 @@ import org.koin.dsl.module
 
 @OptIn(ExperimentalSerializationApi::class)
 fun networkModule() = module {
+
+    single {
+        ApolloClient.Builder()
+            .serverUrl("https://graphql.anilist.co")
+            .build()
+            .also {
+                Napier.base(DebugAntilog())
+                Napier.d("ApolloClient, GraphQl")
+            }
+
+    }
+
     single {
         HttpClient {
             defaultRequest {
