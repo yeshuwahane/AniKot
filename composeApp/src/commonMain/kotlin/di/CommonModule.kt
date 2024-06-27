@@ -13,7 +13,7 @@ import presentation.home.searchanime.SearchViewModel
 
 fun commonModule () =  module {
     single {
-        AnimeRepositoryImpl(get(),get())
+        AnimeRepositoryImpl(get())
     }
     single {
         TopAiringRepositoryImpl(get())
@@ -21,17 +21,16 @@ fun commonModule () =  module {
     single {
         MostWatchedRepositoryImpl(get())
     }
-
     single {
         SearchAnimeRepositoryImpl(get())
     }
     single {
         DashboardViewModel(get(),get(),get())
     }
-    factory {
+    single {
         DetailViewModel(get())
     }
-    factory {
+    single {
         AnimeGridViewModel(get(),get(),get())
     }
     single {

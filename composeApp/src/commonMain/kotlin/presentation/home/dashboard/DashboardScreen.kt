@@ -29,6 +29,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -39,6 +41,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,9 +54,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
+import com.plusmobileapps.konnectivity.Konnectivity
+import com.plusmobileapps.konnectivity.NetworkConnection
 import io.github.aakira.napier.Napier
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
+import kotlinx.coroutines.launch
 import presentation.AnimeState
 import presentation.animegrids.AnimeGridScreen
 import presentation.animegrids.AnimeGridShimmer
@@ -68,17 +74,57 @@ class DashboardScreen : Screen {
 
         val navigator = LocalNavigator.current
 
+        val konnectivity = Konnectivity()
+        val networkConnection: NetworkConnection = konnectivity.currentNetworkConnection
+
+        var isNetworkConnected by remember { mutableStateOf(true) }
+
+
+        val scope = rememberCoroutineScope()
+        val snackbarHostState = remember { SnackbarHostState() }
+
         LaunchedEffect(Unit) {
-//            viewModel.getAnime()
             viewModel.getTopAnimes()
             viewModel.getAiringAnimes()
             viewModel.getTopRatedAnimes()
             Napier.d("LaunchedEffect")
-
         }
         Scaffold(
-
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState)
+            }
         ) { paddingValues ->
+
+            when (networkConnection) {
+                NetworkConnection.NONE -> {
+                    isNetworkConnected = false
+                    scope.launch {
+                        snackbarHostState.showSnackbar("No Network Connection")
+                    }
+                }
+                NetworkConnection.WIFI -> {
+                    if (!isNetworkConnected){
+                        isNetworkConnected = true
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Connection Back")
+                            viewModel.getTopAnimes()
+                            viewModel.getAiringAnimes()
+                            viewModel.getTopRatedAnimes()
+                        }
+                    }
+                }
+                NetworkConnection.CELLULAR -> {
+                    if (!isNetworkConnected){
+                        isNetworkConnected = true
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Connection Back")
+                            viewModel.getTopAnimes()
+                            viewModel.getAiringAnimes()
+                            viewModel.getTopRatedAnimes()
+                        }
+                    }
+                }
+            }
 
             Column(modifier = Modifier.padding(paddingValues).background(Color.Black).fillMaxSize().verticalScroll(
                 rememberScrollState()

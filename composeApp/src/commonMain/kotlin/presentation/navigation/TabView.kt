@@ -55,7 +55,7 @@ fun TabViewSetup(modifier: Modifier = Modifier) {
                 ){
                     tabItems(DashboardTab)
                     tabItems(SearchTab)
-                    tabItems(ProfileTab)
+//                    tabItems(ProfileTab)
                 }
             },
             snackbarHost = {

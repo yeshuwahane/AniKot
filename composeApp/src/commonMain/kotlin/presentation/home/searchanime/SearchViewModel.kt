@@ -27,7 +27,7 @@ class SearchViewModel(
     val searchAnimeState = MutableStateFlow("")
 
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
-    val searchAnimeDebounce = searchAnimeState.debounce(2000L)
+    val searchAnimeDebounce = searchAnimeState.debounce(1000L)
         .distinctUntilChanged()
         .flatMapLatest { value ->
             if (value.isNotBlank()) {
