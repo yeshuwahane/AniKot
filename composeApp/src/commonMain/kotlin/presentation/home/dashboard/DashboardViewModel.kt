@@ -29,14 +29,24 @@ class DashboardViewModel(
         }
         screenModelScope.launch {
            val animes = newAnimeRepository.getNewAnime(1,50)
-            val animeMapped = animes.map {
-                it?.toDashboardUiState()
+
+            if (animes.isNotEmpty()){
+                val animeMapped = animes.map {
+                    it?.toDashboardUiState()
+                }
+                _uiState.update {
+                    it.copy(
+                        dashboardUiState = DataResource.success(animeMapped)
+                    )
+                }
+            }else{
+                _uiState.update {
+                    it.copy(
+                        dashboardUiState = DataResource.error(Throwable("Error"))
+                    )
+                }
             }
-            _uiState.update {
-                it.copy(
-                    dashboardUiState = DataResource.success(animeMapped)
-                )
-            }
+
 
         }
 
@@ -49,10 +59,20 @@ class DashboardViewModel(
         screenModelScope.launch {
             val airingAnimes = topAiringRepositoryImpl.getAiringAnimes(1,50)
 
-            Napier.d("AiringAnimes : ${airingAnimes}")
-            _uiState.update {
-                it.copy(airingUiState = DataResource.success(airingAnimes.map { it?.toDashboardUiState() }))
+            if (airingAnimes.isNotEmpty()){
+                Napier.d("AiringAnimes : $airingAnimes")
+                _uiState.update {
+                    it.copy(airingUiState = DataResource.success(airingAnimes.map { it?.toDashboardUiState() }))
+                }
+            }else{
+                _uiState.update {
+                    it.copy(
+                        airingUiState = DataResource.error(Throwable("Server Error"))
+                    )
+                }
             }
+
+
         }
     }
 
@@ -61,23 +81,40 @@ class DashboardViewModel(
             it.copy(topAnimesUiState = DataResource.loading())
         }
         screenModelScope.launch {
-            val topAnimes = mostWatchedRepositoryImpl.getMostWatchedAnime(1,50)
+            val topAnimes = mostWatchedRepositoryImpl.getMostWatchedAnime(1,6)
 
-            _uiState.update {
-                it.copy(topAnimesUiState = DataResource.success(topAnimes.map { it?.toDashboardUiState() }))
+            if (topAnimes.isNotEmpty()){
+                _uiState.update {
+                    it.copy(topAnimesUiState = DataResource.success(topAnimes.map { it?.toDashboardUiState() }))
+                }
+            }else{
+                _uiState.update {
+                    it.copy(
+                        topAnimesUiState = DataResource.error(Throwable("Server Error"))
+                    )
+                }
             }
         }
     }
 
     fun getTopRatedAnimes(){
         _uiState.update {
-            it.copy(topAnimesUiState = DataResource.loading())
+            it.copy(topRatedAnimesUiState = DataResource.loading())
         }
-
         screenModelScope.launch {
             val topRatedAnimes = newAnimeRepository.getTopRatedAnimes(1,50)
-            _uiState.update {
-                it.copy(topAnimesUiState = DataResource.success(topRatedAnimes.map { it?.toDashboardUiState() }))
+
+
+            if (topRatedAnimes.isNotEmpty()){
+                _uiState.update { state ->
+                    state.copy(topRatedAnimesUiState = DataResource.success(topRatedAnimes.map { it?.toDashboardUiState() }))
+                }
+            }else{
+                _uiState.update {
+                    it.copy(
+                        topRatedAnimesUiState = DataResource.error(Throwable("Server Error"))
+                    )
+                }
             }
         }
 

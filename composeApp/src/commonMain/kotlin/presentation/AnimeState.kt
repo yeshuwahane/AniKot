@@ -9,5 +9,8 @@ data class AnimeState(
     val coverImage:String? = "",
     val startDate:String? = "",
     val description:String? = "",
-    val startYear:String?=""
+    val startYear:String?="",
+    val rating:String? = "",
+    val id:Int? = 0,
+    val episodes:Int? =0
 )

@@ -11,7 +11,8 @@ import presentation.AnimeState
 data class DashboardUiState(
     val dashboardUiState: DataResource<List<AnimeState?>> = DataResource.initial(),
     val airingUiState: DataResource<List<AnimeState?>> = DataResource.initial(),
-    val topAnimesUiState: DataResource<List<AnimeState?>> = DataResource.initial()
+    val topAnimesUiState: DataResource<List<AnimeState?>> = DataResource.initial(),
+    val topRatedAnimesUiState: DataResource<List<AnimeState?>> = DataResource.initial()
     )
 
 
@@ -26,7 +27,8 @@ fun AnimeListQuery.Medium.toDashboardUiState(): AnimeState {
         coverImage = coverImage?.large,
         startDate = startDate.toString(),
         description = description,
-        startYear = startDate?.year.toString()
+        startYear = startDate?.year.toString(),
+        id = id
     )
 }
 
@@ -38,7 +40,8 @@ fun AiringAnimesQuery.Medium.toDashboardUiState(): AnimeState{
         coverImage = coverImage?.large,
         startDate = startDate.toString(),
         description = description,
-        startYear = startDate?.year.toString()
+        startYear = startDate?.year.toString(),
+        id = id
     )
 }
 
@@ -50,7 +53,9 @@ fun TopAnimesQuery.Medium.toDashboardUiState(): AnimeState{
         coverImage = coverImage?.large,
         startDate = startDate.toString(),
         description = description,
-        startYear = startDate?.year.toString()
+        startYear = startDate?.year.toString(),
+        rating = averageScore.toString(),
+        id = id
         )
 }
 
@@ -62,7 +67,9 @@ fun TopRatedAnimesQuery.Medium.toDashboardUiState(): AnimeState{
         coverImage = coverImage?.large,
         startDate = startDate.toString(),
         description = description,
-        startYear = startDate?.year.toString()
+        startYear = startDate?.year.toString(),
+        id = id
+
     )
 }
 

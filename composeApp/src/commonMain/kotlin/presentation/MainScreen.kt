@@ -32,7 +32,6 @@ import cafe.adriel.voyager.koin.getScreenModel
 import io.github.aakira.napier.Napier
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import presentation.home.dashboard.AnimeState
 import presentation.home.dashboard.DashboardViewModel
 
 

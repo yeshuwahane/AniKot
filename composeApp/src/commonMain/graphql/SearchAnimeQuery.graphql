@@ -1,6 +1,6 @@
-query AiringAnimesQuery($page: Int, $perPage: Int) {
-    airingPage: Page(page: $page, perPage: $perPage) {
-        media(status: RELEASING, type: ANIME, sort: START_DATE_DESC, genre_not_in: ["Hentai"]) {
+query SearchAnimeQuery($search: String, $page: Int, $perPage: Int) {
+    searchPage: Page(page: $page, perPage: $perPage) {
+        media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
             id
             title {
                 romaji

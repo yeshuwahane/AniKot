@@ -50,6 +50,9 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines.core)
 
+            //connectivity
+            implementation("com.plusmobileapps:konnectivity:0.1-alpha01")
+
             //graphQl Apollo
             implementation("com.apollographql.apollo3:apollo-runtime:3.2.0")
 
@@ -91,6 +94,8 @@ kotlin {
 
             //connectivity
             implementation("com.plusmobileapps:konnectivity:0.1-alpha01")
+
+
 
         }
     }

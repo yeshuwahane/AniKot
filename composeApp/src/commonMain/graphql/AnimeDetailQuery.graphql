@@ -16,5 +16,18 @@ query AnimeDetailQuery($mediaId: Int!) {
         seasonYear
         status
         genres
+
+        trailer {
+            id
+            site
+        }
+        studios {
+            edges {
+                node {
+                    name
+                }
+            }
+        }
+        averageScore
     }
 }
