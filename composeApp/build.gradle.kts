@@ -96,6 +96,8 @@ kotlin {
             implementation("com.plusmobileapps:konnectivity:0.1-alpha01")
 
 
+                //pagination
+            implementation("app.cash.paging:paging-compose-common:3.3.0-alpha02-0.5.1")
 
         }
     }

@@ -1,5 +1,6 @@
 package di
 
+import data.repository.AiringAnimesPagingSource
 import data.repository.AnimeRepositoryImpl
 import data.repository.MostWatchedRepositoryImpl
 import data.repository.SearchAnimeRepositoryImpl
@@ -17,6 +18,9 @@ fun commonModule () =  module {
     }
     single {
         TopAiringRepositoryImpl(get())
+    }
+    single {
+        AiringAnimesPagingSource(get())
     }
     single {
         MostWatchedRepositoryImpl(get())
