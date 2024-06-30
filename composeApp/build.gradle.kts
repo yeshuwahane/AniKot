@@ -50,8 +50,6 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines.core)
 
-            //connectivity
-            implementation("com.plusmobileapps:konnectivity:0.1-alpha01")
 
             //graphQl Apollo
             implementation("com.apollographql.apollo3:apollo-runtime:3.2.0")
@@ -94,6 +92,10 @@ kotlin {
 
             //connectivity
             implementation("com.plusmobileapps:konnectivity:0.1-alpha01")
+
+            //pagination
+            implementation("app.cash.paging:paging-common:3.3.0-alpha02-0.5.1")
+            implementation("app.cash.paging:paging-compose-common:3.3.0-alpha02-0.5.1")
 
 
                 //pagination
