@@ -36,6 +36,19 @@ fun AnimeGridShimmer() {
     }
 }
 
+@Composable
+fun AnimeGridTitleShimmer() {
+    Column(
+        modifier = Modifier.wrapContentHeight().fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ComponentRectangleLineLong()
+    }
+}
+
+
+
 
 @Composable
 fun ComponentPoster() {

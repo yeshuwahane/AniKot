@@ -1,10 +1,10 @@
 package di
 
-import data.repository.AiringAnimesPagingSource
 import data.repository.AnimeRepositoryImpl
 import data.repository.MostWatchedRepositoryImpl
 import data.repository.SearchAnimeRepositoryImpl
 import data.repository.TopAiringRepositoryImpl
+import data.repository.paging.AiringAnimesPagingSource
 import org.koin.dsl.module
 import presentation.animegrids.AnimeGridViewModel
 import presentation.home.animedetails.DetailViewModel

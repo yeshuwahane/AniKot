@@ -18,8 +18,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Button
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -33,31 +32,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
+import app.cash.paging.compose.collectAsLazyPagingItems
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import data.utils.DataResource
+import com.yeshuwahane.ani.TopAnimesQuery
 import io.github.aakira.napier.Napier
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import presentation.AnimeState
 import presentation.home.animedetails.AnimeDetailScreen
+
 
 class AnimeGridScreen(val condition: String) : Screen {
     @Composable
@@ -68,49 +65,47 @@ class AnimeGridScreen(val condition: String) : Screen {
 
         val uiState by viewModel.uiState.collectAsState()
 
-        var currentPage by remember { mutableStateOf(1) }
-        val totalPages = 7
-        val pageSize = 50
-
         val navigator = LocalNavigator.currentOrThrow
 
-        LaunchedEffect(currentPage) {
+
+
+        LaunchedEffect(Unit) {
             when (condition) {
                 "watched" -> {
                     scope.launch {
-                        viewModel.getMostWatchedAnime(currentPage,pageSize)
+                        viewModel.getMostWatchedAnime()
                     }
                 }
 
                 "rated" -> {
                     scope.launch {
-                        viewModel.getTopRatedAnime(currentPage,pageSize)
+                        viewModel.getTopRatedAnime()
                     }
                 }
 
                 "airing" -> {
                     scope.launch {
-                        viewModel.getAiringAnime(currentPage,50)
+                        viewModel.getAiringAnime()
                     }
                 }
 
                 else -> {
                     scope.launch {
-                        viewModel.getNewAnime(currentPage,pageSize)
+                        viewModel.getNewAnime()
                     }
                 }
             }
-
-
 
             Napier.d("LaunchedEffect")
 
         }
         Scaffold { paddingValues ->
 
-            if (uiState.animeUiState.isLoading()){
+            // stable ui
+            if (uiState.animeUiState.isLoading()) {
                 LazyColumn(
-                    modifier = Modifier.background(Color.Black).fillMaxWidth().padding(paddingValues)
+                    modifier = Modifier.background(Color.Black).fillMaxWidth()
+                        .padding(paddingValues)
                 ) {
 
                     item {
@@ -130,15 +125,14 @@ class AnimeGridScreen(val condition: String) : Screen {
                                 )
                             }
 
-                            uiState.categoryName?.let { category -> Text(text = category, fontSize = 24.sp, color = Color.White, modifier = Modifier.align(Alignment.Center)) }
                         }
                     }
-                    items(6){
+                    items(6) {
                         LazyRow(
                             modifier = Modifier.fillMaxWidth().padding(paddingValues),
                             horizontalArrangement = Arrangement.SpaceAround
                         ) {
-                            items(2){
+                            items(2) {
                                 AnimeGridShimmer()
                             }
                         }
@@ -147,7 +141,7 @@ class AnimeGridScreen(val condition: String) : Screen {
                     }
                 }
 
-            }else if (uiState.animeUiState.isSuccess()){
+            } else if (uiState.animeUiState.isSuccess()) {
                 uiState.animeUiState.data?.let {
                     Column(modifier = Modifier.padding(paddingValues).background(Color.Black)) {
 
@@ -167,38 +161,48 @@ class AnimeGridScreen(val condition: String) : Screen {
                                 )
                             }
 
-                            uiState.categoryName?.let { category -> Text(text = category, fontSize = 24.sp, color = Color.White, modifier = Modifier.align(Alignment.Center)) }
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            uiState.categoryName?.let { category ->
+                                Text(
+                                    text = category,
+                                    fontSize = 24.sp,
+                                    color = Color.White,
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
+                            }
                         }
 
                         AnimeList(
                             animes = it,
                             onItemClick = {
                                 navigator.push(AnimeDetailScreen(it))
-                            },
-                            loadMore = {
-                                viewModel.loadMoreAnimes()
                             }
                         )
 
                     }
                 }
 
-            }else{
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()){
-                    uiState.animeUiState.error?.message?.let { Text(it,color = Color.White) }
+            } else {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    uiState.animeUiState.error?.message?.let { Text(it, color = Color.White) }
                 }
             }
 
 
-
         }
+
+
     }
 
+
     @Composable
-    fun Header(paddingValues: PaddingValues,category:String,onBackClick:()->Unit) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+    fun Header(paddingValues: PaddingValues, category: String, onBackClick: () -> Unit) {
+        Box(modifier = Modifier.fillMaxWidth().padding(paddingValues)) {
             IconButton(
-                onClick = { /* Handle back navigation */ },
+                onClick = {
+                    onBackClick.invoke()
+                },
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(16.dp)
@@ -212,7 +216,7 @@ class AnimeGridScreen(val condition: String) : Screen {
 
             // Display category name
             Text(
-                text = "Current Airing Anime",
+                text = category,
                 fontSize = 24.sp,
                 color = Color.White,
                 modifier = Modifier.align(Alignment.Center)
@@ -221,13 +225,11 @@ class AnimeGridScreen(val condition: String) : Screen {
     }
 
 
+    //OG methods
     @Composable
-    fun AnimeList(animes: List<AnimeState?>, loadMore: () -> Unit,onItemClick: (Int) -> Unit) {
-        val listState = rememberLazyListState()
-        val coroutineScope = rememberCoroutineScope()
+    fun AnimeList(animes: List<AnimeState?>, onItemClick: (Int) -> Unit) {
 
         LazyColumn(
-            state = listState,
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
         ) {
             items(animes.chunked(2)) { rowAnimes ->
@@ -237,28 +239,16 @@ class AnimeGridScreen(val condition: String) : Screen {
                 ) {
                     rowAnimes.forEach { anime ->
                         if (anime != null) {
-                            AnimeItem(anime = anime, onItemClick = { /* Handle item click */ })
+                            AnimeItem(anime = anime, onItemClick = { onItemClick.invoke(it) })
                         }
                     }
                 }
             }
         }
-
-        LaunchedEffect(listState) {
-            snapshotFlow { listState.layoutInfo.visibleItemsInfo }
-                .map { it.lastOrNull() }
-                .distinctUntilChanged()
-                .collect { lastVisibleItem ->
-                    if (lastVisibleItem != null && lastVisibleItem.index >= animes.size - 1) {
-                        loadMore()
-                    }
-                }
-        }
     }
 
-
     @Composable
-    fun AnimeItem(anime: AnimeState,onItemClick: (Int) -> Unit) {
+    fun AnimeItem(anime: AnimeState, onItemClick: (Int) -> Unit) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -302,16 +292,15 @@ class AnimeGridScreen(val condition: String) : Screen {
         }
     }
 
-
     @Composable
-    fun LoadingContent(paddingValues: PaddingValues,category: String,onBackClick: () -> Unit) {
+    fun LoadingContent(paddingValues: PaddingValues, category: String, onBackClick: () -> Unit) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
         ) {
             item {
-                Header(paddingValues,category, onBackClick = {onBackClick.invoke()} )
+                Header(paddingValues, category, onBackClick = { onBackClick.invoke() })
             }
             items(6) {
                 LazyRow(

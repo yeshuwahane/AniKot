@@ -12,7 +12,7 @@ class MostWatchedRepositoryImpl(val apolloClient: ApolloClient) : MostWatchedRep
     override suspend fun getMostWatchedAnime(
         page: Int,
         perPage: Int
-    ): List<TopAnimesQuery.Medium?> {
+    ): List<TopAnimesQuery.Medium> {
         return try {
             val response = apolloClient.query(
                 TopAnimesQuery(
@@ -23,7 +23,7 @@ class MostWatchedRepositoryImpl(val apolloClient: ApolloClient) : MostWatchedRep
                 .execute()
                 .data
                 ?.topAnimesPage?.media
-            response ?: emptyList()
+            response ?.filterNotNull() ?: emptyList()
         } catch (e: ApolloNetworkException) {
             Napier.e("Network exception: ${e.message}")
             emptyList()

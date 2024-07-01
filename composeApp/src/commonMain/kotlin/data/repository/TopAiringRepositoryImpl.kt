@@ -8,7 +8,7 @@ import domain.repository.TopAiringRepository
 import io.github.aakira.napier.Napier
 
 class TopAiringRepositoryImpl(val apolloClient: ApolloClient) : TopAiringRepository {
-    override suspend fun getAiringAnimes(page: Int, perPage: Int): List<AiringAnimesQuery.Medium?> {
+    override suspend fun getAiringAnimes(page: Int, perPage: Int): List<AiringAnimesQuery.Medium> {
         return try {
             val response = apolloClient.query(
                 AiringAnimesQuery(
@@ -19,7 +19,7 @@ class TopAiringRepositoryImpl(val apolloClient: ApolloClient) : TopAiringReposit
                 .execute()
                 .data
                 ?.airingPage?.media
-            response ?: emptyList()
+            response?.filterNotNull() ?: emptyList()
         } catch (e: ApolloNetworkException) {
             Napier.e("Network exception: ${e.message}")
             emptyList()
@@ -29,3 +29,4 @@ class TopAiringRepositoryImpl(val apolloClient: ApolloClient) : TopAiringReposit
         }
     }
 }
+

@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.Rgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -236,7 +237,7 @@ class SearchScreen : Screen {
     fun CategoryButton(category: String, isSelected: Boolean, onCategoryClick: (String) -> Unit) {
         Button(
             onClick = { onCategoryClick.invoke(category) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = if (isSelected) Color.Green else Color.Gray),
+            colors = ButtonDefaults.buttonColors(backgroundColor = if (isSelected) Color(0xffff9532) else Color.Gray),
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier.padding(4.dp)
         ) {
