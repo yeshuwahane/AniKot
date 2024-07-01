@@ -2,6 +2,10 @@
 
 ![AniKot](https://raw.githubusercontent.com/yeshuwahane/AniKot/main/screenshots/AniKot.png)
 
+
+Download Options:
+#### <a href="https://github.com/yeshuwahane/AniKot/releases"> Github Release<a>
+
 # AniKot
 
 AniKot is an open-source mobile app made using Kotlin Multiplatform. It showcases a wide range of
@@ -39,5 +43,6 @@ this fantastic API. You can learn more about it <a href="https://github.com/AniL
 Logo:
 <a href="https://www.freepik.com/icon/pokeball_419467#fromView=search&page=1&position=15&uuid=01585c4e-4902-40eb-b461-45b3a5efaf53">
 Icon by Freepik</a>
+
 
 
