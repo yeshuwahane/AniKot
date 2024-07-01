@@ -1,14 +1,35 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# Kotlin Multiplatform
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+![AniKot](https://raw.githubusercontent.com/yeshuwahane/AniKot/main/screenshots/AniKot.png)
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+# AniKot
+
+AniKot is an open-source mobile app made using Kotlin Multiplatform. It showcases a wide range of
+anime content, including top airing anime, most-watched anime, and top-rated anime. The app allows
+users to view detailed information about each anime, such as the synopsis, total number of episodes,
+ratings, and studio names.
+
+## API
+AniKot uses the AniList GraphQL API to fetch anime data. Special thanks to AniList for providing this fantastic API. You can learn more about it here.
 
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## Features
+
+- **Top Airing Anime**:  Stay updated with the latest and most popular currently airing anime.
+- **Most Watched Anime**: Discover anime that are trending and have the highest viewership.
+- **Top Rated Anime**: Find highly rated anime based on user reviews and ratings
+- **Anime Details**: Get in-depth information about each anime, including synopsis, episode count, ratings, and studio details.
+- **Search Anime**: Search for anime by name or explore genres to find your favorite shows.
+
+
+## Technologies Stack
+
+- **Kotlin Multiplatform**: The app is built entirely in Kotlin, leveraging the power of Kotlin Multiplatform to ensure a seamless experience across both Android and iOS.
+- **Compose**: Used for creating the user interface on both Android and iOS, providing a modern and reactive UI toolkit.
+- **Koin**: Utilized for dependency injection, making the app modular and easy to manage..
+- **Apollo Client**: Employed for setting up and managing GraphQL API calls, enabling efficient data fetching.
+- **Voyager**: Used for navigation within the app, ensuring smooth and intuitive user interactions.
+- **Kamel**: Utilized for loading images from URLs, ensuring efficient and reliable image handling.
+
+
+
