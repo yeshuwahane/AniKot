@@ -36,7 +36,7 @@ this fantastic API. You can learn more about it <a href="https://github.com/AniL
 - **Kamel**: Utilized for loading images from URLs, ensuring efficient and reliable image handling.
 
 ## Logo
-Icon by
+Logo:
 <a href="https://www.freepik.com/icon/pokeball_419467#fromView=search&page=1&position=15&uuid=01585c4e-4902-40eb-b461-45b3a5efaf53">
 Icon by Freepik</a>
 
