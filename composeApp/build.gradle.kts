@@ -126,6 +126,9 @@ android {
         }
     }
     buildTypes {
+        getByName("debug") {
+            isDebuggable = true
+        }
         getByName("release") {
             isMinifyEnabled = false
         }
